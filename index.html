@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salles 3D — La Maison Africaine du Médecin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B141A'/%3E%3Ctext x='32' y='45' font-size='38' font-family='Arial' font-weight='700' text-anchor='middle' fill='%2334D3E0'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/salles.css?v=20261020l">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <div class="sidebar__mark">M</div>
+      <div class="sidebar__title">
+        Maison Africaine du Médecin
+        <small>Salles 3D · Présentation</small>
+      </div>
+    </div>
+
+    <div class="sidebar__section">Services hospitaliers</div>
+
+    <nav class="sidebar__nav">
+      <button class="svc-btn active" data-service="bloc">
+        <span class="svc-btn__num">01</span>
+        Bloc Opératoire
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+
+      <button class="svc-btn" data-service="anesthesie">
+        <span class="svc-btn__num">02</span>
+        Anesthésie-Réanimation
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+
+      <button class="svc-btn" data-service="urgences">
+        <span class="svc-btn__num">03</span>
+        Urgences
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+
+      <button class="svc-btn" data-service="radiologie">
+        <span class="svc-btn__num">04</span>
+        Radiologie
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+
+      <button class="svc-btn" data-service="sterilisation">
+        <span class="svc-btn__num">05</span>
+        Stérilisation
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+
+      <button class="svc-btn" data-service="mobilier">
+        <span class="svc-btn__num">06</span>
+        Mobilier Médical
+        <span class="svc-btn__badge">Actif</span>
+      </button>
+    </nav>
+
+    <div class="sidebar__foot">
+      <b>Équipement · Installation · Formation · SAV</b><br>
+      Tunisie · Côte d'Ivoire
+    </div>
+  </aside>
+
+  <!-- mobile sidebar backdrop -->
+  <div class="sidebar-backdrop"></div>
+
+  <!-- ============ VIEWPORT ============ -->
+  <main class="viewport">
+    <canvas id="c3d"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- HUD corners -->
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+
+    <!-- mobile menu toggle -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <!-- top bar -->
+    <div class="topbar">
+      <div>
+        <div class="topbar__num" id="topbarNum">Service 01</div>
+        <div class="topbar__title" id="topbarTitle">Bloc Opératoire</div>
+        <div class="topbar__sub" id="topbarSub">11 équipements à découvrir</div>
+      </div>
+      <div class="topbar__count" id="topbarCount">1 / 12</div>
+    </div>
+
+    <!-- info panel -->
+    <div class="info-panel" id="infoPanel">
+      <div class="info-panel__step"><i></i> <span id="infoStep">Étape 1 / 12</span></div>
+      <div class="info-panel__title" id="infoTitle">Vue d'ensemble</div>
+      <div class="info-panel__model" id="infoModel">Salle d'opération complète</div>
+      <p class="info-panel__desc" id="infoDesc">Description…</p>
+      <ul class="info-panel__specs" id="infoSpecs"></ul>
+    </div>
+
+    <!-- tour controls -->
+    <div class="tour-bar">
+      <button class="tour-btn" id="btnPrev" title="Précédent">
+        <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+      </button>
+
+      <button class="tour-btn tour-btn--play" id="btnPlay" title="Lecture auto">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="currentColor" stroke="none"/></svg>
+      </button>
+
+      <button class="tour-btn" id="btnNext" title="Suivant">
+        <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
+
+      <div class="tour-sep"></div>
+
+      <div class="tour-progress">
+        <div class="tour-dots" id="tourDots"></div>
+      </div>
+    </div>
+
+    <!-- hint -->
+    <div class="hint">Cliquez sur un équipement pour l'examiner · ← → pour naviguer · Espace = lecture auto</div>
+
+    <!-- loader -->
+    <div class="loader">
+      <div class="loader__inner">
+        <div class="loader__ring"></div>
+        <div class="loader__text">Chargement de la salle…</div>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Three.js -->
+<script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js?v=20261104a"></script>
+<script src="vendor/OBJLoader.js?v=20261104a"></script>
+<!-- App -->
+<script src="js/app.js?v=20261104a"></script>
+
+</body>
+</html>
+

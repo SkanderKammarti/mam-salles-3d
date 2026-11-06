@@ -4015,12 +4015,12 @@
       }
     },
     {
-      id: 'bed-a048', build: buildHospitalBedA048, pos: [1.4, 0, -1.3], rot: 0,
-      cam: [3.1, 1.75, 0.2], look: [1.4, 0.7, -1.3],
+      id: 'bed-d8d-2', build: buildHospitalBed, pos: [1.4, 0, -1.3], rot: 0,
+      cam: [2.8, 1.85, -0.1], look: [1.4, 0.78, -1.3],
       wp: {
-        title: 'Lit d\'hôpital manuel', model: 'Saikang A048',
-        desc: "Lit d'hospitalisation Saikang A048 à manivelles : robustesse et simplicité pour les chambres standard, avec matelas bleu et barrières.",
-        specs: ['Réglage à manivelles', 'Dossier + genouillère', 'Barrières 4 points', 'Hauteur 460–720 mm', 'Structure acier époxy', 'Matelas bleu haute densité', 'Roulettes Ø125 + freins', 'CE · ISO 13485']
+        title: 'Lit d\'hôpital électrique', model: 'Saikang D8D',
+        desc: "Lit médicalisé électrique Saikang D8D : positionnement motorisé 4 sections, hauteur réglable et barrières escamotables pour la chambre d'hospitalisation.",
+        specs: ['4 sections motorisées', 'Hauteur 350–800 mm', 'Barrières escamotables', 'Charge utile 250 kg', 'Roulettes Ø125 frein central', 'Télécommande patient + soignant', 'Têtière / pied ABS', 'CPR release + rails']
       }
     },
     {

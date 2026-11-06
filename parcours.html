@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parcours 3D — Clinique | La Maison Africaine du Médecin</title>
+  <link rel="stylesheet" href="css/salles.css?v=20261106a">
+  <style>
+    body { margin: 0; overflow: hidden; background: #0b1420; font-family: 'Segoe UI', Arial, sans-serif; }
+    #tourCanvas { display: block; width: 100vw; height: 100vh; }
+    .tour-ui { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+    .tour-topbar {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 22px;
+      background: linear-gradient(180deg, rgba(7,16,28,.92) 0%, rgba(7,16,28,0) 100%);
+      pointer-events: auto;
+    }
+    .tour-brand { display: flex; align-items: center; gap: 12px; color: #eaf6fb; }
+    .tour-brand strong { font-size: 16px; font-weight: 700; letter-spacing: .02em; }
+    .tour-brand span { font-size: 12px; color: #8fd3e8; display: block; }
+    .tour-back {
+      color: #8fd3e8; text-decoration: none; font-size: 13px;
+      border: 1px solid rgba(143,211,232,.35); padding: 8px 14px; border-radius: 8px;
+      background: rgba(15,35,55,.5); transition: all .2s;
+    }
+    .tour-back:hover { background: rgba(0,200,238,.15); color: #fff; }
+    .tour-room-label {
+      position: absolute; top: 84px; left: 50%; transform: translateX(-50%);
+      text-align: center; pointer-events: none;
+      background: rgba(8,20,34,.78); border: 1px solid rgba(0,200,238,.3);
+      padding: 12px 22px; border-radius: 12px; backdrop-filter: blur(6px);
+      min-width: 280px; transition: opacity .4s;
+    }
+    .tour-room-label .num { color: #00c8ee; font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+    .tour-room-label .name { color: #fff; font-size: 22px; font-weight: 700; margin-top: 2px; }
+    .tour-room-label .desc { color: #9ec4d4; font-size: 13px; margin-top: 4px; }
+    .tour-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 18px 22px 22px;
+      background: linear-gradient(0deg, rgba(7,16,28,.92) 0%, rgba(7,16,28,0) 100%);
+      pointer-events: auto;
+    }
+    .tour-progress-wrap { display: flex; align-items: center; gap: 14px; }
+    .tour-btn {
+      width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(0,200,238,.4);
+      background: rgba(0,200,238,.12); color: #00c8ee; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .tour-btn:hover { background: rgba(0,200,238,.25); }
+    .tour-progress {
+      flex: 1; height: 6px; background: rgba(255,255,255,.12); border-radius: 99px; overflow: hidden; cursor: pointer;
+    }
+    .tour-progress-bar {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #00c8ee, #3ae0ff);
+      border-radius: 99px; transition: width .2s linear;
+    }
+    .tour-time { color: #8fd3e8; font-size: 12px; min-width: 90px; text-align: right; font-variant-numeric: tabular-nums; }
+    .tour-steps {
+      display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; justify-content: center;
+    }
+    .tour-step {
+      padding: 5px 10px; border-radius: 999px; font-size: 11px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.12); color: #8a9fb0; background: rgba(255,255,255,.04);
+      transition: all .2s; pointer-events: auto;
+    }
+    .tour-step.active { background: rgba(0,200,238,.18); border-color: rgba(0,200,238,.5); color: #dff7ff; }
+    .tour-step:hover { border-color: rgba(0,200,238,.35); color: #cfe9f2; }
+    .tour-loading {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: #0b1420; color: #8fd3e8; z-index: 100; flex-direction: column; gap: 14px;
+    }
+    .tour-loading.hidden { display: none; }
+    .spinner { width: 36px; height: 36px; border: 3px solid rgba(0,200,238,.2); border-top-color: #00c8ee; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <canvas id="tourCanvas"></canvas>
+  <div class="tour-loading" id="tourLoading">
+    <div class="spinner"></div>
+    <div>Chargement du parcours 3D…</div>
+  </div>
+  <div class="tour-ui">
+    <div class="tour-topbar">
+      <div class="tour-brand">
+        <div>
+          <strong>Parcours Clinique 3D</strong>
+          <span>La Maison Africaine du Médecin — Visite virtuelle</span>
+        </div>
+      </div>
+      <a class="tour-back" href="index.html">← Retour aux salles</a>
+    </div>
+    <div class="tour-room-label" id="roomLabel">
+      <div class="num" id="roomNum">ENTRÉE</div>
+      <div class="name" id="roomName">Clinique</div>
+      <div class="desc" id="roomDesc">Visite guidée de l'établissement</div>
+    </div>
+    <div class="tour-bottom">
+      <div class="tour-progress-wrap">
+        <button class="tour-btn" id="playPause" title="Lecture/Pause">❚❚</button>
+        <div class="tour-progress" id="progress"><div class="tour-progress-bar" id="progressBar"></div></div>
+        <div class="tour-time" id="timeLabel">0:00 / 0:00</div>
+      </div>
+      <div class="tour-steps" id="steps"></div>
+    </div>
+  </div>
+  <script src="vendor/three.min.js"></script>
+  <script src="js/parcours.js?v=20261106a"></script>
+</body>
+</html>
